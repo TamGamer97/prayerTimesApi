@@ -85,7 +85,6 @@ async function getTimes(lat, long)
     return [prayersJson, [countryCode, townCity]]
 }
 
-
 app.use(`/.netlify/functions/api`, router);
 
 module.exports = app;
@@ -96,3 +95,4 @@ module.exports.handler = serverless(app);
 // npm install express netlify-lambda serverless-http encoding - install default packages
 // npm start - start development
 // http://localhost:9000/.netlify/functions/api - /routename
+// chromebook change
