@@ -26,6 +26,83 @@ router.get("/prayertimes/:latitude/:longitude", async (req, res) => {
 
 });
 
+router.get("/prayertimes/:latitude/:longitude/:country/:cCode/:townCity/:day/:month/:year", async (req, res) => {
+    // http://localhost:9000/.netlify/functions/api/prayertimes/51.948360/-0.282240/United%20Kingdom/GB/Hitchin/5/3/2021
+    const {latitude, longitude, country, cCode, townCity, day, month, year} = req.params
+
+    // day > 15
+    // month > 10
+    // year > 2021
+
+    // const cCode = "GB"
+    // const country = "United Kingdom"
+    // const townCity = "Hitchin"
+
+    var monthsList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    var daysWeekList = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+
+    var date = new Date()
+    date.setDate(day)
+    date.setMonth(month - 1)
+    date.setFullYear(year)
+
+    const shortDay = daysWeekList[date.getDay()]
+    const shortMon = monthsList[month - 1]
+
+    console.log(shortDay + " " +shortMon)
+
+    // https://muslimpro.com/en/find?coordinates=51.94921%2C-0.283414&country_code=GB&country_name=United+Kingdom&city_name=Hitchin&date=2021-03&convention=precalc
+    const link = 'https://muslimpro.com/en/find?coordinates='+latitude+'%2C'+longitude+'&country_code='+cCode+'&country_name='+country+'&city_name='+townCity+'&date='+year+'-'+month+'&convention=precalc'
+
+    let timingData;
+
+    await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(link)}`)
+        .then(response => {
+            if (response.ok) return response.json()
+            throw new Error('Network response was not ok.')
+        })
+        .then(data => {
+            //console.log(data)
+
+            data = JSON.stringify(data)
+
+            //console.log(data)
+
+            var dataAfter = data.split(shortDay+' '+day+' '+shortMon)[1]
+
+            var todaysData = dataAfter.split("</tr>")[0]
+
+            todaysData = todaysData.split(">")
+
+            const timings = {}
+
+            timings["Fajr"] = todaysData[2]
+            timings["Sunrise"] = todaysData[4]
+            timings["Zuhr"] = todaysData[6]
+            timings["Asr"] = todaysData[8]
+            timings["Maghrib"] = todaysData[10]
+            timings["Isha"] = todaysData[12]
+
+            for(const prayer in timings)
+            {
+                var time = timings[prayer]
+                var newTime = time.split("</td")[0]
+
+                timings[prayer] = newTime
+
+            }
+
+            console.log(timings)
+            timingData = timings
+        })
+
+    res.json({
+        times : timingData,
+        date: day + "/" + month + "/" + year
+    })
+
+})
+
 // functions
 
 async function getTimes(lat, long)
@@ -85,6 +162,10 @@ async function getTimes(lat, long)
     return [prayersJson, [countryCode, townCity]]
 }
 
+async function getCustomTimes(lat, long, day, month, year, country, cCode, townCity)
+{
+    // https://muslimpro.com/en/find?coordinates=51.94921%2C-0.283414&country_code=GB&country_name=United+Kingdom&city_name=Hitchin&date=2021-03&convention=precalc
+}
 
 app.use(`/.netlify/functions/api`, router);
 
@@ -96,3 +177,4 @@ module.exports.handler = serverless(app);
 // npm install express netlify-lambda serverless-http encoding - install default packages
 // npm start - start development
 // http://localhost:9000/.netlify/functions/api - /routename
+// codespace update
