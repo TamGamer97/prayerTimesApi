@@ -26,6 +26,13 @@ router.get("/prayertimes/:latitude/:longitude", async (req, res) => {
 
 });
 
+router.get("/prayertimes/:latitude/:longitude/:day/:month/:year", async (req, res) => {
+    const {latitude, longitude, day, month, year} = req.params
+
+    
+
+})
+
 // functions
 
 async function getTimes(lat, long)
@@ -83,6 +90,22 @@ async function getTimes(lat, long)
     //console.log("Calculated!")
     //console.log(prayersJson)
     return [prayersJson, [countryCode, townCity]]
+}
+
+async function getCustomTimes(lat, long, day, month, year, country, cCode, townCity)
+{
+    if(day < 10) {day = "0"+day}
+    const link = "https://muslimpro.com/en/find?coordinates="+lat+""+longitude+"&country_code="+cCode+"&country_name="+country+"&city_name="+townCity+"&date="+year+"-"+day+"&convention=precalc"
+    var dayOfWeek = "Thu"
+    var shortMonth = "Sep"
+    
+    await fetch(link)
+        .then(response => response.json())
+        .then(data => {
+            var dataAfter = data.split('<td class="prayertime-1">'+dayOfWeek+" " + day + " " + shortMonth + "</td>")[1]
+
+            
+        })
 }
 
 app.use(`/.netlify/functions/api`, router);
