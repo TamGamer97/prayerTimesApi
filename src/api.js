@@ -56,17 +56,18 @@ router.get("/prayertimes/:latitude/:longitude/:country/:cCode/:townCity/:day/:mo
 
     let timingData;
 
-    await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(link)}`)
-        .then(response => {
-            if (response.ok) return response.json()
-            throw new Error('Network response was not ok.')
+    //'https://api.allorigins.win/get?url=${encodeURIComponent(link)}'
+
+    await fetch(link)
+        .then(function (res) {
+            return res.text();
         })
         .then(data => {
-            //console.log(data)
+            console.log(data)
 
             data = JSON.stringify(data)
 
-            //console.log(data)
+            console.log(data)
 
             var dataAfter = data.split(shortDay+' '+day+' '+shortMon)[1]
 
