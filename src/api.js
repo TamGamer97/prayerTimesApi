@@ -21,7 +21,8 @@ router.get("/prayertimes/:latitude/:longitude", async (req, res) => {
 
   res.json({
     times: times,
-    location: loca
+    location: loca,
+    NOTE: 'This route has been deprecated. Go to the prayerTimes doc to find the new route'
   })
 
 });
