@@ -1,5 +1,4 @@
 const express = require("express");
-var cors = require('cors')
 const serverless = require("serverless-http");
 
 const app = express();
@@ -10,7 +9,6 @@ require('encoding')
 const fetch = require('cross-fetch');
 
 
-app.options('*', cors()) // include before other routes
 
 // routes
 router.get("/route1/:latitude/:longitude", async (req, res) => { // only latitude and longitude
@@ -31,6 +29,10 @@ router.get("/route2/:latitude/:longitude/:country/:cCode/:townCity/:day/:month/:
     const {latitude, longitude, country, cCode, townCity, day, month, year} = req.params
 
     const data = await getTimesByDate(latitude, longitude, country, cCode, townCity, day, month, year)
+
+
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
     res.json({
         times : data[0],
@@ -187,6 +189,7 @@ app.use(`/.netlify/functions/api`, router);
 
 module.exports = app;
 module.exports.handler = serverless(app);
+
 // startup
 
 // npm install express netlify-lambda serverless-http encoding - install default packages
