@@ -9,17 +9,8 @@ const router = express.Router();
 require('encoding')
 const fetch = require('cross-fetch');
 
-const headers = {
-    
-        "origin": "*",
-        "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-        "preflightContinue": false,
-        "optionsSuccessStatus": 204
-    
-  };
 
-
-app.options('*', cors(headers)) // include before other routes
+app.options('*', cors()) // include before other routes
 
 // routes
 router.get("/route1/:latitude/:longitude", async (req, res) => { // only latitude and longitude
