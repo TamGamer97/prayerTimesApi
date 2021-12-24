@@ -17,6 +17,9 @@ router.get("/route1/:latitude/:longitude", async (req, res) => { // only latitud
 
     const data = await getTimes(latitude, longitude)
 
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    
     res.json({
         times: data[0],
         location: data[1]
