@@ -1,4 +1,5 @@
 const express = require("express");
+var cors = require('cors')
 const serverless = require("serverless-http");
 
 const app = express();
@@ -8,7 +9,14 @@ const router = express.Router();
 require('encoding')
 const fetch = require('cross-fetch');
 
+const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE'
+  };
 
+
+app.options('*', cors(headers)) // include before other routes
 
 // routes
 router.get("/route1/:latitude/:longitude", async (req, res) => { // only latitude and longitude
@@ -185,24 +193,6 @@ app.use(`/.netlify/functions/api`, router);
 
 module.exports = app;
 module.exports.handler = serverless(app);
-
-exports.handler = async (event) => {
-    const headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE'
-      };
-      
-      if (event.httpMethod !== 'POST') {
-          // To enable CORS
-          return {
-            statusCode: 200, // <-- Important!
-            headers,
-            body: 'This was not a POST request!'
-          };
-       }
-  };
-
 // startup
 
 // npm install express netlify-lambda serverless-http encoding - install default packages
