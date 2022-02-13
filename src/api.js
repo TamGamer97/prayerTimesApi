@@ -130,7 +130,7 @@ async function getTimesByDate(latitude, longitude, country, cCode, townCity, day
     console.log(shortDay + " " +shortMon)
 
     // https://muslimpro.com/en/find?coordinates=51.94921%2C-0.283414&country_code=GB&country_name=United+Kingdom&city_name=Hitchin&date=2021-03&convention=precalc
-    const link = 'https://muslimpro.com/en/find?coordinates='+latitude+'%2C'+longitude+'&country_code='+cCode+'&country_name='+country+'&city_name='+townCity+'&date='+year+'-'+month+'&convention=precalc&asrjuristic='+asrjuristic+''
+    const link = 'https://muslimpro.com/en/find?coordinates='+latitude+'%2C'+longitude+'&country_code='+cCode+'&country_name='+country+'&city_name='+townCity+'&date='+year+'-'+month+'&asrjuristic='+asrjuristic+''
 
     let timingData;
     let calculationMethod;
