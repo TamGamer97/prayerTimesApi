@@ -27,11 +27,11 @@ router.get("/route1/:latitude/:longitude", async (req, res) => { // only latitud
 
 });
 
-router.get("/route2/:latitude/:longitude/:country/:cCode/:townCity/:day/:month/:year", async (req, res) => { // all 6 paraneters
+router.get("/route2/:latitude/:longitude/:country/:cCode/:townCity/:day/:month/:year/:asrjuristic", async (req, res) => { // all 6 paraneters
 
-    const {latitude, longitude, country, cCode, townCity, day, month, year} = req.params
+    const {latitude, longitude, country, cCode, townCity, day, month, year, asrjuristic} = req.params
 
-    const data = await getTimesByDate(latitude, longitude, country, cCode, townCity, day, month, year)
+    const data = await getTimesByDate(latitude, longitude, country, cCode, townCity, day, month, year, asrjuristic)
 
 
     res.header("Access-Control-Allow-Origin", "*");
@@ -103,7 +103,7 @@ async function getTimes(lat, long)
     return [prayersJson, [countryCode, townCity]]
 }
 
-async function getTimesByDate(latitude, longitude, country, cCode, townCity, day, month, year)
+async function getTimesByDate(latitude, longitude, country, cCode, townCity, day, month, year, asrjuristic='Standard')
 {
     
     // day > 15
@@ -130,7 +130,7 @@ async function getTimesByDate(latitude, longitude, country, cCode, townCity, day
     console.log(shortDay + " " +shortMon)
 
     // https://muslimpro.com/en/find?coordinates=51.94921%2C-0.283414&country_code=GB&country_name=United+Kingdom&city_name=Hitchin&date=2021-03&convention=precalc
-    const link = 'https://muslimpro.com/en/find?coordinates='+latitude+'%2C'+longitude+'&country_code='+cCode+'&country_name='+country+'&city_name='+townCity+'&date='+year+'-'+month+'&convention=precalc'
+    const link = 'https://muslimpro.com/en/find?coordinates='+latitude+'%2C'+longitude+'&country_code='+cCode+'&country_name='+country+'&city_name='+townCity+'&date='+year+'-'+month+'&convention=precalc&asrjuristic='+asrjuristic+''
 
     let timingData;
     let calculationMethod;
